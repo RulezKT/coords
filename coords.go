@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"math"
+
+	"github.com/RulezKT/types"
 )
 
 const SIZEOFREC int = 1024
@@ -177,12 +179,12 @@ var DE440S_FILE_RECORDS = [TOTAL_SUMMARIES_NUMBER + 1]FileRecords{
 
 // Расчёт координат положений планет на указанную дату (секунды с J2000)
 // v2024
-func GetCoordinates(dateInSeconds int64, targetCode int, centerCode int, bspFile *bytes.Reader) Position {
+func GetCoordinates(dateInSeconds int64, targetCode int, centerCode int, bspFile *bytes.Reader) types.Position {
 
 	if dateInSeconds <= SEGMENT_START_TIME || dateInSeconds >= SEGMENT_LAST_TIME {
 
 		fmt.Println("getCoordinates: Date is out of range")
-		return Position{X: 0.0, Y: 0.0, Z: 0.0}
+		return types.Position{X: 0.0, Y: 0.0, Z: 0.0}
 	}
 
 	var i = 0
@@ -198,7 +200,7 @@ func GetCoordinates(dateInSeconds int64, targetCode int, centerCode int, bspFile
 		}
 	} else {
 		fmt.Println("getCoordinates: Date is out of range")
-		return Position{X: 0.0, Y: 0.0, Z: 0.0}
+		return types.Position{X: 0.0, Y: 0.0, Z: 0.0}
 	}
 
 	var intLen = DE440S_FILE_RECORDS[i].IntLen
@@ -230,7 +232,7 @@ func GetCoordinates(dateInSeconds int64, targetCode int, centerCode int, bspFile
 	order = int(order)
 	var deg = order + 1
 
-	return Position{
+	return types.Position{
 		X: chebyshev(order, tau, data[2:2+deg]),
 		Y: chebyshev(order, tau, data[2+deg:2+2*deg]),
 		Z: chebyshev(order, tau, data[2+2*deg:2+3*deg]),
